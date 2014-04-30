@@ -12,7 +12,8 @@
     var nameCheck = function () {
         var censored = false;
         var name = $('#nameInput').val();
-
+        var censoredList = [];
+        
         for (var i = 0; i < censorList.length; i++) {
             var foundOccurrence;
             do {
@@ -23,8 +24,9 @@
                     for (var x = itemIndex; x < itemIndex + censorList[i].length; x++) {
                         name = name.replaceChar('*', x);
                     }
-
+                    
                     censored = true;
+                    censoredList.push(censorList[i]);
                 }
             } while (foundOccurrence);
         }
@@ -33,6 +35,7 @@
             $('#outputMessage').css('color', 'red');
             $('#outputMessage').html('Your name is censored:');
             $('#outputName').html(name);
+            $('#outputReason').html('For the following words: <br />' + censoredList.join('<br />'));
         } else {
             $('#outputMessage').css('color', 'green');
             $('#outputMessage').html('Your name is not censored:');
@@ -59,11 +62,12 @@
 
     <div id="main_content_wrap" class="outer">
         <section id="main_content" class="inner" style="text-align: center">
-            <input type="text" id="nameInput" />
+            <input type="text" id="nameInput" maxlength="14"/>
             <button type="button" id="nameButton" style="border-radius: 3px;">Check</button>
             <div id="outputContent">
                 <p id="outputMessage"></p>
                 <p id="outputName"></p>
+                <p id="outputReason"></p>
             </div>
         </section>
     </div>
