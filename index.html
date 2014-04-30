@@ -1,0 +1,35 @@
+<script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="censorlist.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#nameButton').on('click', nameCheck);
+        $('#nameInput').on('keypress', function (e) {
+            e.keyCode == 13 ? nameCheck() : null;
+        });
+    });
+
+    var nameCheck = function () {
+        var found = true;
+        var name = $('#nameInput').val();
+        while (found) {
+            found = false;
+            for (var i = 0; i < censorList.length; i++) {
+                if (name.indexOf(censorList[i]) > -1) {
+                    name = name.replace(censorList[i], '*********'.substring(0, censorList[i].length));
+                    found = true;
+                }
+            };
+        };
+        $('#nameInput').val(name);
+    };
+</script>
+
+<html>
+    <head>
+        <title>Name Check</title>
+    </head>
+    <body>
+        <input type="text" id="nameInput" />
+        <button type="button" id="nameButton">Check</button>
+    </body>
+</html>

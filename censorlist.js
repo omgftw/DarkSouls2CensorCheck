@@ -1,0 +1,1 @@
+var censorList = ['ab', 'cd'];
