@@ -13,22 +13,31 @@
         var censored = false;
         var name = $('#nameInput').val();
 
-            for (var i = 0; i < censorList.length; i++) {
-                if (name.indexOf(censorList[i]) > -1) {
-                    name = name.replace(censorList[i], ''.padLeft('*', censorList[i].length));
+        for (var i = 0; i < censorList.length; i++) {
+            var foundOccurrence;
+            do {
+                foundOccurrence = false;
+                var itemIndex = name.toLowerCase().indexOf(censorList[i].toLowerCase())
+                if (itemIndex > -1) {
+                    foundOccurrence = true;
+                    for (var x = itemIndex; x < itemIndex + censorList[i].length; x++) {
+                        name = name.replaceChar('*', x);
+                    }
+
                     censored = true;
                 }
-            }
+            } while (foundOccurrence);
+        }
 
-            if (censored) {
-                $('#outputMessage').css('color', 'red');
-                $('#outputMessage').html('Your name is censored:');
-                $('#outputName').html(name);
-            } else {
-                $('#outputMessage').css('color', 'green');
-                $('#outputMessage').html('Your name is not censored:');
-                $('#outputName').html(name);
-            }
+        if (censored) {
+            $('#outputMessage').css('color', 'red');
+            $('#outputMessage').html('Your name is censored:');
+            $('#outputName').html(name);
+        } else {
+            $('#outputMessage').css('color', 'green');
+            $('#outputMessage').html('Your name is not censored:');
+            $('#outputName').html(name);
+        }
     };
 </script>
 

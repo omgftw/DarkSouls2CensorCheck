@@ -80,3 +80,15 @@ Function.prototype.perfTest = function (loops, obj, returnExecutionsPerSecond) {
 var isNumeric = function (number) {
     return (!isNaN(number) && isFinite(number));
 }
+
+//Name: replaceChar
+//Description: Allows replacement of a character at the specified index in a string
+//Usage: String.replaceChar(char, index)
+//Usage Example:
+//'texting'.replaceChar('s', 2); //will results in 'testing'
+
+String.prototype.replaceChar = function(char, index) {
+    var str = this.split("");
+    str[index] = char;
+    return str.join("");
+}
