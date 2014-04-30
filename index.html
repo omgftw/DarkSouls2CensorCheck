@@ -1,4 +1,5 @@
-<script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/extend.js"></script>
 <script type="text/javascript" src="censorlist.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -9,27 +10,53 @@
     });
 
     var nameCheck = function () {
-        var found = true;
+        var censored = false;
         var name = $('#nameInput').val();
-        while (found) {
-            found = false;
+
             for (var i = 0; i < censorList.length; i++) {
                 if (name.indexOf(censorList[i]) > -1) {
-                    name = name.replace(censorList[i], '*********'.substring(0, censorList[i].length));
-                    found = true;
+                    name = name.replace(censorList[i], ''.padLeft('*', censorList[i].length));
+                    censored = true;
                 }
-            };
-        };
-        $('#nameInput').val(name);
+            }
+
+            if (censored) {
+                $('#outputMessage').css('color', 'red');
+                $('#outputMessage').html('Your name is censored:');
+                $('#outputName').html(name);
+            } else {
+                $('#outputMessage').css('color', 'green');
+                $('#outputMessage').html('Your name is not censored:');
+                $('#outputName').html(name);
+            }
     };
 </script>
 
 <html>
-    <head>
-        <title>Name Check</title>
-    </head>
-    <body>
-        <input type="text" id="nameInput" />
-        <button type="button" id="nameButton">Check</button>
-    </body>
+<head>
+    <title>Name Check</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/stylesheet.css">
+</head>
+<body>
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+            <a id="forkme_banner" href="https://github.com/omgftw">View on GitHub</a>
+
+            <h1 id="project_title">Dark Souls 2 Name Censor Checker</h1>
+            <h2 id="project_tagline"></h2>
+
+        </header>
+    </div>
+
+    <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner" style="text-align: center">
+            <input type="text" id="nameInput" />
+            <button type="button" id="nameButton" style="border-radius: 3px;">Check</button>
+            <div id="outputContent">
+                <p id="outputMessage"></p>
+                <p id="outputName"></p>
+            </div>
+        </section>
+    </div>
+</body>
 </html>
