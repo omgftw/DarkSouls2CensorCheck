@@ -55,6 +55,7 @@ String.prototype.padRight = function (char, length) {
 //myFunc.perfTest(10, null, true, "input1", "input2"); //will run 100 times and display how many times it can run per second.
 //var myArray = [];
 //myArray.push.perfTest(10, myArray, true, "value"); //will insert the string "value" 10 times into "myArray" and display how many times it can run per second.
+//[].push.perfTest(10, myArray, true, "value"); //will have the same result as the code on the line above.
 Function.prototype.perfTest = function (loops, obj, returnExecutionsPerSecond) {
     var args = [].splice.call(arguments, 3);
     var start = new Date();
@@ -85,16 +86,24 @@ var isNumeric = function (number) {
 //Description: Allows replacement of a character at the specified index in a string
 //Usage: String.replaceChar(char, index)
 //Usage Example:
-//'texting'.replaceChar('s', 2); //will results in 'testing'
-
+//'texting'.replaceChar('s', 2); //will result in 'testing'
 String.prototype.replaceChar = function(char, index) {
-    var str = this.split("");
-    str[index] = char;
-    return str.join("");
+    if (index >= 0 && index < this.length) {
+        var str = this.split("");
+        str[index] = char;
+        return str.join("");
+    }
+    return this;
 }
 
+//Name: replaceChars
+//Description: Allows replacement of a specified number of character from a specified index. Builds upon replaceChar()
+//Usage: String.replaceChars(char, startIndex, length) // length is inclusive of the starting index
+//Usage Example:
+//'texting'.replaceChars('+', 2, 3); //will result in 'te+++ng'
 String.prototype.replaceChars = function (char, startIndex, length) {
-    if (startIndex < this.length && startIndex + length <= this.length) {
+    if (startIndex >= 0 && length >= 0 && startIndex < this.length) {
+        startIndex + length <= this.length ? null : length = this.length - startIndex;
         var returnValue = this;
         for (var i = startIndex; i < startIndex + length; i++) {
             returnValue = returnValue.replaceChar(char, i);
@@ -104,13 +113,18 @@ String.prototype.replaceChars = function (char, startIndex, length) {
     return this;
 }
 
+//Name: indicesOf
+//Description: Finds all occurrences of a specified string within another string. Builds upon indexOf()
+//Usage: String.indicesOf(searchString)
+//Usage Example:
+//'texting'.indicesOf('t'); //will result in [0, 3]
 String.prototype.indicesOf = function (searchString) {
     var startPoint = 0;
     var result = -1;
     var indices = [];
     while ((result = this.indexOf(searchString, startPoint)) > -1) {
         indices.push(result);
-        startPoint = result + searchString.length + 1;
+        startPoint = result + searchString.length;
     }
     return indices;
 }
