@@ -11,35 +11,30 @@
     var nameCheck = function () {
         var censored = false;
         var name = $('#nameInput').val();
+        var censoredName = name;
         var censoredList = [];
         
         if (name.length > 0) {
             for (var i = 0; i < censorList.length; i++) {
-                var foundOccurrence;
-                do {
-                    foundOccurrence = false;
-                    var itemIndex = name.toLowerCase().indexOf(censorList[i].toLowerCase())
-                    if (itemIndex > -1) {
-                        foundOccurrence = true;
-                        for (var x = itemIndex; x < itemIndex + censorList[i].length; x++) {
-                            name = name.replaceChar('*', x);
+                    var itemIndices = name.toLowerCase().indicesOf(censorList[i].toLowerCase())
+                    if (itemIndices.length >= 1) {
+                        for (var x = 0; x < itemIndices.length; x++) {
+                            censoredName = censoredName.replaceChars('*', itemIndices[x], censorList[i].length);
                         }
-                        
                         censored = true;
                         censoredList.push(censorList[i]);
                     }
-                } while (foundOccurrence);
             }
 
             if (censored) {
                 $('#outputMessage').css('color', 'red');
                 $('#outputMessage').html('Your name is censored:');
-                $('#outputName').html(name);
+                $('#outputName').html(censoredName);
                 $('#outputReason').html('For the following words: <br />' + censoredList.join('<br />'));
             } else {
                 $('#outputMessage').css('color', 'green');
                 $('#outputMessage').html('Your name is not censored:');
-                $('#outputName').html(name);
+                $('#outputName').html(censoredName);
                 $('#outputReason').html('');
             }
         } else {
@@ -58,11 +53,8 @@
 <body>
     <div id="header_wrap" class="outer">
         <header class="inner">
-            <a id="forkme_banner" href="https://github.com/omgftw/DarkSouls2CensorCheck">View on GitHub</a>
-
             <h1 id="project_title">Dark Souls 2 Name Censor Checker</h1>
             <h2 id="project_tagline"></h2>
-
         </header>
     </div>
 
@@ -76,6 +68,12 @@
                 <p id="outputReason"></p>
             </div>
         </section>
+    </div>
+
+    <div id="footer_wrap" class="outer">
+        <footer class="inner" style="text-align: center">
+            <a href="https://github.com/omgftw/DarkSouls2CensorCheck">View Source Code on GitHub</a>
+        </footer>
     </div>
 </body>
 </html>

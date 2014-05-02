@@ -92,3 +92,25 @@ String.prototype.replaceChar = function(char, index) {
     str[index] = char;
     return str.join("");
 }
+
+String.prototype.replaceChars = function (char, startIndex, length) {
+    if (startIndex < this.length && startIndex + length <= this.length) {
+        var returnValue = this;
+        for (var i = startIndex; i < startIndex + length; i++) {
+            returnValue = returnValue.replaceChar(char, i);
+        }
+        return returnValue
+    }
+    return this;
+}
+
+String.prototype.indicesOf = function (searchString) {
+    var startPoint = 0;
+    var result = -1;
+    var indices = [];
+    while ((result = this.indexOf(searchString, startPoint)) > -1) {
+        indices.push(result);
+        startPoint = result + searchString.length + 1;
+    }
+    return indices;
+}
