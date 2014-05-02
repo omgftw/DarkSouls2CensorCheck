@@ -3,9 +3,8 @@
 <script type="text/javascript" src="censorlist.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#nameButton').on('click', nameCheck);
-        $('#nameInput').on('keypress', function (e) {
-            e.keyCode == 13 ? nameCheck() : null;
+        $('#nameInput').on('input', function (e) {
+            nameCheck();
         });
     });
 
@@ -14,32 +13,38 @@
         var name = $('#nameInput').val();
         var censoredList = [];
         
-        for (var i = 0; i < censorList.length; i++) {
-            var foundOccurrence;
-            do {
-                foundOccurrence = false;
-                var itemIndex = name.toLowerCase().indexOf(censorList[i].toLowerCase())
-                if (itemIndex > -1) {
-                    foundOccurrence = true;
-                    for (var x = itemIndex; x < itemIndex + censorList[i].length; x++) {
-                        name = name.replaceChar('*', x);
+        if (name.length > 0) {
+            for (var i = 0; i < censorList.length; i++) {
+                var foundOccurrence;
+                do {
+                    foundOccurrence = false;
+                    var itemIndex = name.toLowerCase().indexOf(censorList[i].toLowerCase())
+                    if (itemIndex > -1) {
+                        foundOccurrence = true;
+                        for (var x = itemIndex; x < itemIndex + censorList[i].length; x++) {
+                            name = name.replaceChar('*', x);
+                        }
+                        
+                        censored = true;
+                        censoredList.push(censorList[i]);
                     }
-                    
-                    censored = true;
-                    censoredList.push(censorList[i]);
-                }
-            } while (foundOccurrence);
-        }
+                } while (foundOccurrence);
+            }
 
-        if (censored) {
-            $('#outputMessage').css('color', 'red');
-            $('#outputMessage').html('Your name is censored:');
-            $('#outputName').html(name);
-            $('#outputReason').html('For the following words: <br />' + censoredList.join('<br />'));
+            if (censored) {
+                $('#outputMessage').css('color', 'red');
+                $('#outputMessage').html('Your name is censored:');
+                $('#outputName').html(name);
+                $('#outputReason').html('For the following words: <br />' + censoredList.join('<br />'));
+            } else {
+                $('#outputMessage').css('color', 'green');
+                $('#outputMessage').html('Your name is not censored:');
+                $('#outputName').html(name);
+                $('#outputReason').html('');
+            }
         } else {
-            $('#outputMessage').css('color', 'green');
-            $('#outputMessage').html('Your name is not censored:');
-            $('#outputName').html(name);
+            $('#outputMessage').html('');
+            $('#outputName').html('');
             $('#outputReason').html('');
         }
     };
@@ -63,8 +68,8 @@
 
     <div id="main_content_wrap" class="outer">
         <section id="main_content" class="inner" style="text-align: center">
+            <div>Just start typing:</div>
             <input type="text" id="nameInput" maxlength="14"/>
-            <button type="button" id="nameButton" style="border-radius: 3px;">Check</button>
             <div id="outputContent">
                 <p id="outputMessage"></p>
                 <p id="outputName"></p>
